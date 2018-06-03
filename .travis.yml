@@ -1,0 +1,12 @@
+language: python
+services:
+    - mysql
+before_install:
+    - mysql -u root < tests/creat_data.sls 
+install:
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install coveralls
+script: pytest --cov=./
+after_success:
+  - coveralls
