@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/WolverineSportsAnalytics/WNBA.svg?branch=master)](https://travis-ci.org/WolverineSportsAnalytics/WNBA)
+[![Coverage Status](https://coveralls.io/repos/github/WolverineSportsAnalytics/WNBA/badge.svg)](https://coveralls.io/github/WolverineSportsAnalytics/WNBA)
 # Contributors:
     - Jake Becker
     - Evan Ciancio
