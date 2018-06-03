@@ -8,6 +8,8 @@ install:
   - pip install pytest-cov
   - pip install coveralls
   - pip install mysql-connector
-script: pytest --cov=./
+script: 
+    pytest
+    coverage run tests/test_basic.py
 after_success:
   - coveralls
