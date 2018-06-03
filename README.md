@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/WolverineSportsAnalytics/WNBA.svg?branch=master)](https://travis-ci.org/WolverineSportsAnalytics/WNBA)
 # Contributors:
     - Jake Becker
     - Evan Ciancio
