@@ -6,11 +6,11 @@ Looking to create a test database in order to test scraping accuracy
 
 # Running
 
-###Requirements
+### Requirements
   - mysql <br>
   - pytest (pip install pytest) <br>
 
-###Running
-`mysql -u root < tests/creat_data.sls` 
-`pytest`
+### Running
+`mysql -u root < tests/creat_data.sls`<br> 
+`pytest`<br>
 
