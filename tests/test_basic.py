@@ -23,20 +23,30 @@ class TestDataBaseConnection(unittest.TestCase):
 
 
 class TestPlayerReference(unittest.TestCase):
-        def setUpModule(self):
+        def setUp(self):
             self.cnx = mysql.connector.connect(user=constants.testUser,
                 host=constants.testHost,
                 database=constants.testName,
                 password=constants.testPassword)                                                                                                               
-            self.cusror = cnx.cursor()
+            self.cursor = self.cnx.cursor()
 
         def testInsertAndRetrival(self):
-            insert_statement = "Insert into playerReferece values" 
+            insert_statement = "Insert into player_reference (playerID, playerName) values (%s, %s)" 
+            objects = ("1", "Evan Ciancio")
+            
+            self.cursor.execute(insert_statement, objects)
+            self.cnx.commit()
 
-            self.assertEqual(1, 1)
+            select = "Select playerName from player_reference where playerID = 1"
+            self.cursor.execute(select)
+            name = str(self.cursor.fetchall()[0][0])
 
-        def tearDownModule():
-            clear_table = "delete from playerReferece"
+            self.assertEqual(name , "Evan Ciancio")
+
+        def tearDown(self):
+            clear_table = "delete from player_reference"
+            self.cursor.execute(clear_table)
+            self.cnx.commit()
             
 
     
