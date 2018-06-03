@@ -7,7 +7,7 @@ install:
   - pip install pytest
   - pip install pytest-cov
   - pip install coveralls
-  - pip install mysql
+  - pip install mysql-connector
 script: pytest --cov=./
 after_success:
   - coveralls
