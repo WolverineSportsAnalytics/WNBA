@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`player_reference` (
   PRIMARY KEY (`playerID`),
   UNIQUE INDEX `playerid_UNIQUE` (`playerID` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2815
+AUTO_INCREMENT = 0
 DEFAULT CHARACTER SET = latin1;
 
 USE `wnba_test` ;
