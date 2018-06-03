@@ -9,7 +9,7 @@ install:
   - pip install coveralls
   - pip install mysql-connector
 script: 
-    pytest
+    pytest;
     coverage run tests/test_basic.py
 after_success:
   - coveralls
