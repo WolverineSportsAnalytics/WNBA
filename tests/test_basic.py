@@ -4,6 +4,7 @@ import constants
 import mysql.connector
 import sys
 from os import path
+sys.path.append("Scrapers" )
 sys.path.append("../Scrapers" )
 import playerReferenceScraper
 

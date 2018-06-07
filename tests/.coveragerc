@@ -1,7 +1,0 @@
-[run]
-branch = True
-omit = ./*
-source = ../Scrapers
-         ../Extrapilators
-         ../Optimization
-
