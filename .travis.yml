@@ -3,6 +3,7 @@ services:
     - mysql
 before_install:
     - mysql -u root < tests/creat_data.sls 
+    - cd tests
 install:
   - pip install pytest
   - pip install pytest-cov
@@ -10,6 +11,6 @@ install:
   - pip install mysql-connector
 script: 
     pytest;
-    coverage run tests/test_basic.py
+    coverage run test_basic.py
 after_success:
   - coveralls
