@@ -35,6 +35,8 @@ class TestPlayerReference(unittest.TestCase):
                 password=constants.testPassword)                                                                                                               
             self.cursor = self.cnx.cursor()
 
+
+
         def testInsertAndRetrival(self):
             insert_statement = "Insert into player_reference (playerID, playerName) values (%s, %s)" 
             objects = ("1", "Evan Ciancio")
@@ -47,6 +49,15 @@ class TestPlayerReference(unittest.TestCase):
             name = str(self.cursor.fetchall()[0][0])
 
             self.assertEqual(name , "Evan Ciancio")
+
+        def testScraperWork(self):
+            playerReferenceScraper.scrapeHtml(self.cursor, self.cnx)
+            select = "Select nickName from player_reference where bbrefid=\"hayesti01w\";"
+            self.cursor.execute(select)
+
+            name = str(self.cursor.fetchall()[0][0])
+            self.assertEqual(name , "Tiffany Hayes")
+
 
         def tearDown(self):
             clear_table = "delete from player_reference"
