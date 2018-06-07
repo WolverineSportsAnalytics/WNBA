@@ -1,7 +1,12 @@
 [run]
 branch = True
 omit = tests/*
+       constants.py
 source = Scrapers
          Extrapilators
          Optimization
 
+[report]
+exclude_lines = 
+	if __name__=="__main__":
+	def main
