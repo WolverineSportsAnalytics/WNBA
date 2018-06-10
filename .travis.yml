@@ -2,7 +2,7 @@ language: python
 services:
     - mysql
 before_install:
-    - mysql -u root < tests/creat_data.sls 
+    - mysql -u root < tests/create_data.sql 
 install:
   - pip install pytest
   - pip install pytest-cov
