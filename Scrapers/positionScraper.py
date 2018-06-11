@@ -12,18 +12,7 @@ from bs4 import BeautifulSoup, Comment
 Fanduel scraper scrapes the fanduel csv and inserts into the performance table
 '''
 
-def getDate(day, month, year, cursor):
-    findGame = 'SELECT iddates FROM dates WHERE date = %s'
-    findGameData = (date(year, month, day),)
-    cursor.execute(findGame, findGameData)
-
-    dateID = -1
-    for datez in cursor:
-        dateID = datez[0]
-
-    return dateID
-
-def insert_into_performance(cursor, cnx, dateID):
+def insert_into_performance(cursor, cnx):
     #empty will be used to scrape from rotoguru csv
 
     getPlayerID = "select playerID from player_reference where nickName= %s"
@@ -103,10 +92,7 @@ if __name__ == "__main__":
             password=constants.testPassword)                                                                                                               
     cursor = cnx.cursor()
     
-    #dateID = getDate(constants.dayP, constants.monthP, constants.yearP, cursor)
-    dateID = getDate(10, 6, 2018, cursor)
-
-    insert_into_performance(cursor, cnx, dateID)
+    insert_into_performance(cursor, cnx)
 
     cursor.close()
     cnx.commit()
