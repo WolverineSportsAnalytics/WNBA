@@ -10,6 +10,9 @@ startDayP = 18
 startMonthP = 5
 startYearP = 2018
 
-endDayP = 8
+endDayP = 11
 endMonthP = 6
 endYearP = 2018
+
+dailyPerformanceExtrapolationDateCutOff = 126
+extapolatorUpperBound= 147
