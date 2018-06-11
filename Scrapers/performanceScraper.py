@@ -94,17 +94,19 @@ def updateAndInsertPlayerRef(
         mydivs = soup.findAll("div", {"class": "scorebox"})
         for i in mydivs:
             for j in i.find_all('a'):
-                teams.append(j['href'].split('/')[3])
+                team = j['href'].split('/')[3]
+                if len(team) == 3:
+                    teams.append(team)
 
         tables = soup.find_all("tbody")
 
-        team_tables = [[tables[0],teams[0], teams[2], 0], [
-            tables[1], teams[2], teams[0], 1]]
+        team_tables = [[tables[0],teams[0], teams[1], 0], [
+            tables[1], teams[1], teams[0], 1]]
 
         for team in team_tables:
             # set team specific data
-            tea = team[2]
-            opp = team[3]
+            tea = team[1]
+            opp = team[2]
             basic_table = team[0].find_all('tr')
             home = team[3]
             # scrape regular stats
