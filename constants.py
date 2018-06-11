@@ -14,6 +14,8 @@ endDayP = 11
 endMonthP = 6
 endYearP = 2018
 
+todayID = 146
+
 teamVsDefenseExtrapolationDateCutOff = 126
 dailyPerformanceExtrapolationDateCutOff = 126
 teamPerformanceExtrapolationDateCutOff = 126
