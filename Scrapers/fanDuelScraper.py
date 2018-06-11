@@ -46,11 +46,13 @@ def insert_into_performance(cursor, cnx, dateID):
         names = name.split()
         name = names[0] + ' ' + names[1]
         
-        team  = i.find_all('td')[2].text # team
+        team  = i.find_all('td')[2].text.rstrip()# team
         if team == "NY":
             team = "NYL"
         if team == "LAV":
             team = "LVA"
+        if team == "LA":
+            team = "LAS"
 
         pos = i.find_all('td')[4].text # pos
         sal = i.find_all('td')[15].find('input')['value']
@@ -58,7 +60,6 @@ def insert_into_performance(cursor, cnx, dateID):
         sals = sal.split(",")
         sal = sals[0] + sals[1]
         minutes = i.find_all('td')[6].text
-        team = i.find_all('td')[2].text
         opp = i.find_all('td')[3].text
         getPlayerIDD = (name, )
         cursor.execute(getPlayerID, getPlayerIDD)
