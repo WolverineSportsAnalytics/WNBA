@@ -66,6 +66,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`player_reference` (
   `lastName` VARCHAR(100) NULL DEFAULT NULL,
   `playerName` VARCHAR(100) NULL DEFAULT NULL,
   `team` VARCHAR(45) NULL DEFAULT NULL,
+  `pos` VARCHAR(45) NULL DEFAULT NULL,
   `nickName` VARCHAR(150) NULL DEFAULT NULL,
   `rotoguruID` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`playerID`),
@@ -363,10 +364,10 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`team_vs_guards` (
   `TS` float DEFAULT NULL,
   `eFG` float DEFAULT NULL,
   PRIMARY KEY (`teamID`),
-  KEY `wingsTeamID_idx` (`dailyTeamID`),
-  KEY `wingsDateID_idx` (`dateID`),
-  CONSTRAINT `wingsDateID` FOREIGN KEY (`dateID`) REFERENCES `dates` (`iddates`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `wingsTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `guardsTeamID_idx` (`dailyTeamID`),
+  KEY `guardsDateID_idx` (`dateID`),
+  CONSTRAINT `guardsDateID` FOREIGN KEY (`dateID`) REFERENCES `dates` (`iddates`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `guardsTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `wnba_test`.`team_vs_fowards` (
@@ -408,10 +409,10 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`team_vs_fowards` (
   `TS` float DEFAULT NULL,
   `eFG` float DEFAULT NULL,
   PRIMARY KEY (`teamID`),
-  KEY `wingsTeamID_idx` (`dailyTeamID`),
-  KEY `wingsDateID_idx` (`dateID`),
-  CONSTRAINT `wingsDateID` FOREIGN KEY (`dateID`) REFERENCES `dates` (`iddates`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `wingsTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fowardsTeamID_idx` (`dailyTeamID`),
+  KEY `fowardsDateID_idx` (`dateID`),
+  CONSTRAINT `fowardsDateID` FOREIGN KEY (`dateID`) REFERENCES `dates` (`iddates`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fowardsTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
