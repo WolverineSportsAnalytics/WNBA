@@ -160,15 +160,9 @@ def team_vs_defense_extrapolation(cursor, dates, teams, cnx):
 
             tableID = tableID + 1
 
-if __name__ == "__main__":
-    cnx = mysql.connector.connect(user=constants.testUser,
-            host=constants.testHost,
-            database=constants.testName,
-            password=constants.testPassword)                                                                                                               
-    cursor = cnx.cursor()
 
-
-   
+def extrapolate(dateCutOff, upperBoundCutOff, cursor, cnx):
+ 
     # get all teams
     getBbreffs = "SELECT bbreff FROM team_reference"
     cursor.execute(getBbreffs)
@@ -179,8 +173,6 @@ if __name__ == "__main__":
     for row in sqlResults:
         teams.append(row[0])
 
-    dateCutOff = constants.teamVsDefenseExtrapolationDateCutOff
-    upperBoundCutOff = constants.extapolatorUpperBound
 
     getDates = "SELECT iddates FROM dates WHERE iddates >= %s AND iddates <= %s"
     getDatesD = (dateCutOff, upperBoundCutOff)
@@ -194,6 +186,20 @@ if __name__ == "__main__":
     
     team_vs_defense_extrapolation(cursor, dates, teams, cnx)
 
+
+
+if __name__ == "__main__":
+    cnx = mysql.connector.connect(user=constants.testUser,
+            host=constants.testHost,
+            database=constants.testName,
+            password=constants.testPassword)                                                                                                               
+    cursor = cnx.cursor()
+
+    dateCutOff = constants.teamVsDefenseExtrapolationDateCutOff
+    upperBoundCutOff = constants.extapolatorUpperBound
+
+    extrapolate(dateCutOff, upperBoundCutOff, cursor, cnx)
+    
     cursor.close()
     cnx.commit()
     cnx.close()

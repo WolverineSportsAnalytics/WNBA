@@ -47,14 +47,7 @@ def team_daily_extrapolate_data(cursor, dates, teams, cnx):
 
             cnx.commit()
 
-
-if __name__ == "__main__":
-    cnx = mysql.connector.connect(user=constants.testUser,
-            host=constants.testHost,
-            database=constants.testName,
-            password=constants.testPassword)                                                                                                               
-    cursor = cnx.cursor()
-
+def extrapolate(dateCutOff, upperBoundCutOff, cursor, cnx):
     # get teams
     getTeamIDs = "SELECT teamID FROM team_reference"
     cursor.execute(getTeamIDs)
@@ -64,8 +57,6 @@ if __name__ == "__main__":
     for row in sqlResults:
         teams.append(row[0])
 
-    dateCutOff = constants.teamPerformanceExtrapolationDateCutOff
-    upperBoundCutOff = constants.extapolatorUpperBound
 
     getDates = "SELECT iddates FROM dates WHERE iddates >= %s AND iddates <= %s"
     getDatesD = (dateCutOff, upperBoundCutOff)
@@ -78,6 +69,20 @@ if __name__ == "__main__":
 
     team_daily_extrapolate_data(cursor, dates, teams, cnx)
 
+
+
+
+if __name__ == "__main__":
+    cnx = mysql.connector.connect(user=constants.testUser,
+            host=constants.testHost,
+            database=constants.testName,
+            password=constants.testPassword)                                                                                                               
+    cursor = cnx.cursor()
+
+    dateCutOff = constants.teamPerformanceExtrapolationDateCutOff
+    upperBoundCutOff = constants.extapolatorUpperBound
+
+    extrapolate(dateCutOff, upperBoundCutOff, cursor, cnx)
     cursor.close()
     cnx.commit()
     cnx.close()

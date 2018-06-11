@@ -45,15 +45,7 @@ def player_total_avg(cursor, dates, players, cnx):
 
             tableID = tableID + 1
 
-
-
-if __name__ == "__main__":
-    cnx = mysql.connector.connect(user=constants.testUser,
-            host=constants.testHost,
-            database=constants.testName,
-            password=constants.testPassword)                                                                                                               
-    cursor = cnx.cursor()
-
+def extrapolate(dateCutOff, upperBoundCutOff, cursor, cnx):
     getPlayerIDs = "SELECT playerID FROM player_reference"
     cursor.execute(getPlayerIDs)
 
@@ -62,8 +54,6 @@ if __name__ == "__main__":
     for row in sqlResults:
         players.append(row[0])
 
-    dateCutOff = constants.dailyPerformanceExtrapolationDateCutOff
-    upperBoundCutOff = constants.extapolatorUpperBound
 
     getDates = "SELECT iddates FROM dates WHERE iddates >= %s AND iddates <= %s"
     getDatesD = (dateCutOff, upperBoundCutOff)
@@ -75,6 +65,19 @@ if __name__ == "__main__":
         dates.append(row[0])
 
     player_total_avg(cursor, dates, players, cnx)
+    
+
+if __name__ == "__main__":
+    cnx = mysql.connector.connect(user=constants.testUser,
+            host=constants.testHost,
+            database=constants.testName,
+            password=constants.testPassword)                                                                                                               
+    cursor = cnx.cursor()
+    
+    dateCutOff = constants.dailyPerformanceExtrapolationDateCutOff
+    upperBoundCutOff = constants.extapolatorUpperBound
+
+    extrapolate(dateCutOff, upperBoundCutOff, cursor, cnx)
 
     cursor.close()
     cnx.commit()
