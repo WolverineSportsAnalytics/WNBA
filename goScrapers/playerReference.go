@@ -11,13 +11,14 @@ import (
 
 var teams = []string{"ATL", "CHI", "CON", "IND", "LAS", "MIN", "NYL", "PHO", "LVA", "SEA", "DAL", "WAS"}
 
-
+// player struct
 type Player struct {
 	bbrefid string
 	nickName string
 	team string
 }
 
+//method to add to table
 func (p Player) add_to_table(db *sql.DB) {
 	sep := strings.Split(p.nickName, ",")
 	first := sep[1]
@@ -29,6 +30,7 @@ func (p Player) add_to_table(db *sql.DB) {
 	}
 }
 
+// scape Html page for tam
 func scrapeHtml(url string, team string, db *sql.DB) {
 	resp, _ := http.Get(url)
 
@@ -52,7 +54,10 @@ func scrapeHtml(url string, team string, db *sql.DB) {
 			}
 	}
 }
+
+//main
 func main(){
+	// currently only connecting to test db
 	db, err :=sql.Open("mysql","root:@/wnba_test")
 	defer db.Close()
 	err = db.Ping()
