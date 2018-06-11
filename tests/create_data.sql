@@ -273,6 +273,57 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`player_daily_avg` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
+CREATE TABLE IF NOT EXISTS `wnba_test`.`team_daily_avg_performance` (
+  `dailyAvgPerformanceID` int(11) NOT NULL AUTO_INCREMENT,                                                                                                                               
+  `dailyTeamID` int(11) DEFAULT NULL,                                                                                                                                                    
+  `dateID` int(11) DEFAULT NULL,                                                                                                                                                         
+  `wins` int(11) DEFAULT NULL,                                                                                                                                                           
+  `losses` int(11) DEFAULT NULL,                                                                                                                                                         
+  `ORT` float DEFAULT NULL,                                                                                                                                                              
+  `DRT` float DEFAULT NULL,                                                                                                                                                              
+  `avgPointsAllowed` float DEFAULT NULL,                                                                                                                                                 
+  `avgPointsScored` float DEFAULT NULL,                                                                                                                                                  
+  `pace` float DEFAULT NULL,                                                                                                                                                             
+  `effectiveFieldGoalPercent` float DEFAULT NULL,                                                                                                                                        
+  `turnoverPercent` float DEFAULT NULL,
+  `offensiveReboundPercent` float DEFAULT NULL,
+  `FT/FGA` float DEFAULT NULL,
+  `FG` float DEFAULT NULL,
+  `FGA` float DEFAULT NULL,
+  `FGP` float DEFAULT NULL,
+  `3P` float DEFAULT NULL,
+  `3PA` float DEFAULT NULL,
+  `3PP` float DEFAULT NULL,
+  `FT` float DEFAULT NULL,
+  `FTA` float DEFAULT NULL,
+  `FTP` float DEFAULT NULL,
+  `offensiveRebounds` float DEFAULT NULL,
+  `defensiveRebounds` float DEFAULT NULL,
+  `totalRebounds` float DEFAULT NULL,
+  `assists` float DEFAULT NULL,
+  `steals` float DEFAULT NULL,
+  `blocks` float DEFAULT NULL,
+  `turnovers` float DEFAULT NULL,
+  `personalFouls` float DEFAULT NULL,
+  `trueShootingPercent` float DEFAULT NULL,
+  `3pointAttemptRate` float DEFAULT NULL,
+  `freeThrowAttemptRate` float DEFAULT NULL,
+  `defensiveReboundPercent` float DEFAULT NULL,
+  `totalReboundPercent` float DEFAULT NULL,
+  `assistPercent` float DEFAULT NULL,
+  `stealPercent` float DEFAULT NULL,
+  `blockPercent` float DEFAULT NULL,
+  `points1Q` float DEFAULT NULL,
+  `points2Q` float DEFAULT NULL,
+  `points3Q` float DEFAULT NULL,
+  `points4Q` float DEFAULT NULL,
+  PRIMARY KEY (`dailyAvgPerformanceID`),
+  KEY `dailyTeamPerformanceTeamID_idx` (`dailyTeamID`),
+  KEY `dailyTeamPerformanceDateID_idx` (`dateID`),
+  CONSTRAINT `dailyTeamPerformanceDateID` FOREIGN KEY (`dateID`) REFERENCES `dates` (`iddates`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `dailyTeamPerformanceTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
