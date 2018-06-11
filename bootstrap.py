@@ -28,7 +28,8 @@ def main():
     today = generateBoxScoreUrls.findDate(now.year, now.month, now.day, cursor)
     # dailyPerformanceExtrapilator.extrapolate(0, today, cursor, cnx)
     # teamPerformanceExtrapilator.extrapolate(0, today, cursor, cnx)
-    # teamVsDefenseExtrapilator.extrapolate(0, today, cursor, cnx)
+    os.system("mysql - root < Scrapers/setPerformancePos.sql")
+    teamVsDefenseExtrapilator.extrapolate(0, today, cursor, cnx)
 
 
 
