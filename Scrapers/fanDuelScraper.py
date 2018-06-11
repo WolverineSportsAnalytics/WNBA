@@ -23,74 +23,15 @@ def getDate(day, month, year, cursor):
 
     return dateID
 
-def fixFanduelIDs(cursor):
-    getFDIds = "select playerID, fanduelID FROM player_reference WHERE fanduelID IS NOT NULL"
-    cursor.execute(getFDIds)
-
-    insertFDIds = "UPDATE player_reference SET fanduelID = %s WHERE playerID = %s"
-
-    results = cursor.fetchall()
-
-    for player in results:
-        fdID = player[1]
-        pID = player[0]
-        if fdID.find("-") != -1:
-            fdDate, actualFDID = fdID.split("-")
-
-            insertFDIdsD = (actualFDID, pID)
-            cursor.execute(insertFDIds, insertFDIdsD)
-
-            cnx.commit()
-
-def alignPlayerIDs(cursor):
-    selec_id = "select playerID from player_reference where firstName= %s and lastName = %s"
-    select_idTwo = "SELECT playerID from player_reference where nickName=%s"
-
-    insertRotoguruID = "UPDATE player_reference SET fanduelID = %s WHERE playerID = %s"
-
-    with open(constants.fanduelFileLocation, 'rb') as csvfile:
-        reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-        i = 0
-        for row in reader:
-            # if they don't play don't consider them
-            firstName = row[3]
-            firstName = firstName.strip()
-            lastName = row[5]
-            lastName = lastName.strip()
-            selectData = (firstName, lastName)
-            cursor.execute(selec_id, selectData)
-            if not cursor.rowcount:
-                name = row[4]
-                nameData = (name,)
-                cursor.execute(select_idTwo, nameData)
-                if cursor.rowcount:
-                    playerID = 0
-                    for id in cursor:
-                        playerID = id[0]
-                    insertData = (row[1].strip(), playerID)
-                    cursor.execute(insertRotoguruID, insertData)
-                    cnx.commit()
-                else:
-                    print "Must manual insert fanduel id for: " + name
-            else:
-                playerID = 0
-                for id in cursor:
-                    playerID = id[0]
-                insertData = (row[1].strip(), playerID)
-                cursor.execute(insertRotoguruID, insertData)
-                cnx.commit()
-
-    cursor.close()
-    cnx.commit()
-    cnx.close()
-
 def insert_into_performance(cursor, cnx, dateID):
     #empty will be used to scrape from rotoguru csv
 
     getPlayerID = "select playerID from player_reference where nickName= %s"
+    getPlayerbyfirstandTeam = "select playerID from player_reference where firstName= %s and team=%s"
+    getPlayerbylastandTeam = "select playerID from player_reference where lastName= %s and team=%s"
 
     getTeamAbbrev = "SELECT wsa from team_reference where fanduel = %s"
-    update_performance = "INSERT INTO performance (playerID, dateID, fanduel, team, opponent, fanduelPosition) VALUES (%s, %s, %s, %s, %s, %s)"
+    update_performance = "INSERT INTO performance (playerID, dateID, fanduel, team, opponent, fanduelPosition, projMinutes) VALUES (%s, %s, %s, %s, %s, %s, %s)"
 
 
     url = "https://www.rotowire.com/daily/wnba/optimizer.php?site=FanDuel&sport=wnba"
@@ -104,26 +45,48 @@ def insert_into_performance(cursor, cnx, dateID):
         name  = i.find_all('td')[1].text # name 
         names = name.split()
         name = names[0] + ' ' + names[1]
-        print name
+        
+        team  = i.find_all('td')[2].text # team
+        if team == "NY":
+            team = "NYL"
+        if team == "LAV":
+            team = "LVA"
+
         pos = i.find_all('td')[4].text # pos
-        print pos
         sal = i.find_all('td')[15].find('input')['value']
         sal = sal[1:]
         sals = sal.split(",")
         sal = sals[0] + sals[1]
-        print sal
+        minutes = i.find_all('td')[6].text
         team = i.find_all('td')[2].text
         opp = i.find_all('td')[3].text
         getPlayerIDD = (name, )
         cursor.execute(getPlayerID, getPlayerIDD)
+        player_id = cursor.fetchall()
+  
+        if not len(player_id):                    
 
-        if not cursor.rowcount:                    
-          print ("Did not insert into performance table for " + name)
+            getPlayerIDD = (names[0], team )
+            cursor.execute(getPlayerbyfirstandTeam, getPlayerIDD)
+            player_id = cursor.fetchall()
+            
+            if not len(player_id):
+                getPlayerIDD = (names[1], team )
+                cursor.execute(getPlayerbylastandTeam, getPlayerIDD)
+                player_id = cursor.fetchall()
 
+                if not len(player_id):
+                    print ("Did not insert into performance table for " + name)
+                else: 
+                    found = True
+            else:
+                found = True
         else:
+            found = True
+
+        if found:
           try:
-              player_id = cursor.fetchall()[0][0]
-              print player_id
+              player_id = player_id[0][0]
 
               # insert into the performance table
               inserts = (
@@ -132,13 +95,13 @@ def insert_into_performance(cursor, cnx, dateID):
               sal,
               team,
               opp,
-              pos)
+              pos,
+              minutes)
 
               cursor.execute(update_performance, inserts)
-              print update_performance, inserts
 
           except:
-              traceback.print_exc()
+              # traceback.print_exc()
               print name
 
           cnx.commit()
@@ -151,14 +114,14 @@ if __name__ == "__main__":
     cursor = cnx.cursor()
     
     #dateID = getDate(constants.dayP, constants.monthP, constants.yearP, cursor)
-    dateID = getDate(10, 6, 2018, cursor)
+    dateID = getDate(11, 6, 2018, cursor)
+    print dateID
 
     insert_into_performance(cursor, cnx, dateID)
 
     cursor.close()
     cnx.commit()
     cnx.close()
-
 
 
 
