@@ -20,7 +20,7 @@ gdStartYear = 2018
 
 numdaysGradientDescent = 2
 
-todayID = 146
+todayID = 150
 
 teamVsDefenseExtrapolationDateCutOff = 126
 dailyPerformanceExtrapolationDateCutOff = 126
