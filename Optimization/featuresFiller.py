@@ -65,7 +65,7 @@ def fill(year, month, day, numdays, cursor):
 
     getTeamData = "SELECT avgPointsAllowed, avgPointsScored FROM team_daily_avg_performance WHERE dateID = %s AND dailyTeamID = %s"
 
-    insert_features = "Insert into features (idfeatures, playerID, dateID, fanduel, draftkings, blocksDPA, pointsDPA, stealsDPA, AST_DPA, turnoversDPA, totalReboundsDPA, tripleDoubleDPA, doubleDoubleDPA, 3PM_DPA, oReboundDPA, dReboundDPA, minutesDPA, FG_DPA, FGA_DPA, FGP_DPA, 3PA_DPA, 3PP_DPA, FTM_DPA, FTA_DPA, FTP_DPA, personalFoulsDPA, plusMinusDPA, trueShootingP_DPA, eFG_DPA, freeThrowAttemptRateDPA, 3PointAttemptRateDPA, oReboundP_DPA, dReboundP_DPA, totalReboundP_DPA, ASTP_DPA, STP_DPA, BLKP_DPA, turnoverP_DPA, USG_DPA, oRatingDPA, dRatingDPA, blocksTvP, pointsTvP, stealsTvP, assistsTvP, turnoversTvP, tReboundsTvP, dddTvP, ddTvP, 3pmTvP, 3paTvP, oReboundsTvP, dReboundsTvP, minutesTvP, fgTvP, fgaTvP, ftTvP, ftaTvP, bpmTvP, ppmTvP, spmTvP, apmTvP, tpmTvP, dddpgTvP, ddpgTvP, 3ppTvP, orpmTvP, drpmTvP, fgpTvP, ftpTvP, usgTvP, ortTvP, drtTvP, tsTvP, efgTvP, avgPointsAllowedTeam, avgPointsScoredTeam) values (%s, %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s)" 
+    insert_features = "Insert into features (idfeatures, playerID, dateID, projMinutes, fanduel, draftkings, blocksDPA, pointsDPA, stealsDPA, AST_DPA, turnoversDPA, totalReboundsDPA, tripleDoubleDPA, doubleDoubleDPA, 3PM_DPA, oReboundDPA, dReboundDPA, minutesDPA, FG_DPA, FGA_DPA, FGP_DPA, 3PA_DPA, 3PP_DPA, FTM_DPA, FTA_DPA, FTP_DPA, personalFoulsDPA, plusMinusDPA, trueShootingP_DPA, eFG_DPA, freeThrowAttemptRateDPA, 3PointAttemptRateDPA, oReboundP_DPA, dReboundP_DPA, totalReboundP_DPA, ASTP_DPA, STP_DPA, BLKP_DPA, turnoverP_DPA, USG_DPA, oRatingDPA, dRatingDPA, blocksTvP, pointsTvP, stealsTvP, assistsTvP, turnoversTvP, tReboundsTvP, dddTvP, ddTvP, 3pmTvP, 3paTvP, oReboundsTvP, dReboundsTvP, minutesTvP, fgTvP, fgaTvP, ftTvP, ftaTvP, bpmTvP, ppmTvP, spmTvP, apmTvP, tpmTvP, dddpgTvP, ddpgTvP, 3ppTvP, orpmTvP, drpmTvP, fgpTvP, ftpTvP, usgTvP, ortTvP, drtTvP, tsTvP, efgTvP, avgPointsAllowedTeam, avgPointsScoredTeam) values (%s, %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s,  %s, %s)" 
     # execute command + load into numpy array
     playersPlaying = []
     for date in dateIDs:
@@ -115,9 +115,11 @@ def fill(year, month, day, numdays, cursor):
         features = features + (player[2], 0)
 
         indvPlayerData = []
+        
 	indvPlayerData.append(feaID)
 	indvPlayerData.append(player[0])
 	indvPlayerData.append(player[1])
+        indvPlayerData.append(player[10])
 	indvPlayerData.append(player[2])
 	indvPlayerData.append(0)
         basicQueryData = (player[1], player[0])
