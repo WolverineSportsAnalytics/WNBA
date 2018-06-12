@@ -46,9 +46,11 @@ def main():
     teamPerformanceExtrapilator.extrapolate(0, today, cursor, cnx)
     teamVsDefenseExtrapilator.extrapolate(0, today, cursor, cnx)
     sumPoints.auto(today, cursor) 
-    '''
+    cursor.execute("update performance set projMinutes=minutesPlayed where projMinutes is null")
+    cnx.commit()
     today = generateBoxScoreUrls.findDate(now.year, now.month, now.day, cursor)
     featuresFiller.fill(now.year, now.month, now.day, today, cursor)
+    '''
     cursor.close()
     cnx.commit()
     cnx.close()
