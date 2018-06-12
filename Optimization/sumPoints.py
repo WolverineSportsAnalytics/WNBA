@@ -16,7 +16,7 @@ def getDate(day, month, year, cursor):
     return gameIDP
 
 def auto(dateID, cursor):
-    sum2 = "update performance set fanduelPts = (FT + totalRebounds*1.2 + assists*1.5 + blocks*3 + steals*3 - turnovers + (3PM)*3 + (fieldGoals-3PM)*2) where dateID = %s"
+    sum2 = "update performance set fanduelPts = (FT + totalRebounds*1.2 + assists*1.5 + blocks*3 + steals*3 - turnovers + (3PM)*3 + (fieldGoals-3PM)*2)"
 
     joinFDDKPoints = "UPDATE features as f INNER JOIN performance as p ON (f.dateID = p.dateID AND f.playerID = p.playerID) SET f.draftkingsPts = p.draftkingsPts, f.fanduelPts = p.fanduelPts WHERE p.dateID = %s AND f.dateID = %s"
 
@@ -24,15 +24,11 @@ def auto(dateID, cursor):
 
     joinData = (dateToJoin,)
     joinJoinData = (dateToJoin, dateToJoin)
-    cursor.execute(sum2, joinData)
+    cursor.execute(sum2)
     print "Updated FanDuel Points"
-    cnx.commit()
     cursor.execute(joinFDDKPoints, joinJoinData)
     print "Updated Futures DK and FD Points"
 
-    cursor.close()
-    cnx.commit()
-    cnx.close()
     
 
 
