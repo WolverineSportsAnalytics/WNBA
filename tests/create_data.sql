@@ -493,6 +493,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`features` (
   `efgTvP` float DEFAULT NULL,
   `avgPointsAllowedTeam` float DEFAULT NULL,      
   `avgPointsScoredTeam` float DEFAULT NULL,
+  `projMinutes` FLOAT NULL DEFAULT NULL,
   `fanduelPts` float DEFAULT NULL,
   `draftkingsPts` float DEFAULT NULL,
   PRIMARY KEY (`idfeatures`)

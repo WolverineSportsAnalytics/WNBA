@@ -1,5 +1,6 @@
 # TODO add projMinutes and fanduel salary to Model
 benSimmonsModel = ["FG_DPA",
+                   "projMinutes",
                    "pointsDPA",
                    "FGA_DPA",
                    "minutesDPA",
