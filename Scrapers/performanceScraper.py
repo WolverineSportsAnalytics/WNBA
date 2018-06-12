@@ -289,6 +289,9 @@ def updateAndInsertPlayerRef(
     cleanUp = "DELETE FROM performance WHERE blocks IS NULL"
     cursor.execute(cleanUp)
 
+    setPosition = "update performance, player_reference  set performance.fanduelPosition = player_reference.pos where performance.playerID = player_reference.playerID;"
+    cursor.execute(setPosition)
+
     cursor.close()
     cnx.commit()
     cnx.close()
