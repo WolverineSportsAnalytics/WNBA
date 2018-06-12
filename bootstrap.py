@@ -3,7 +3,7 @@ import os
 import constants
 from Scrapers import generateDates, playerReferenceScraper, positionScraper, teamReferenceScraper, generateBoxScoreUrls, teamPerformanceScraper, performanceScraper
 from Extrapilators import dailyPerformanceExtrapilator, teamPerformanceExtrapilator, teamVsDefenseExtrapilator
-from Optimization import sumPoints 
+from Optimization import sumPoints, featuresFiller 
 import mysql.connector
 import datetime
 
@@ -47,7 +47,8 @@ def main():
     teamVsDefenseExtrapilator.extrapolate(0, today, cursor, cnx)
     sumPoints.auto(today, cursor) 
     '''
-    
+    today = generateBoxScoreUrls.findDate(now.year, now.month, now.day, cursor)
+    featuresFiller.fill(now.year, now.month, now.day, today, cursor)
     cursor.close()
     cnx.commit()
     cnx.close()

@@ -40,23 +40,7 @@ def getDates(day, month, year, numdays, cursor):
                 gameIDs.append(game[0])
 
     return gameIDs
-
-if __name__ == "__main__":
-    print("Loading data...")
-    cnx = mysql.connector.connect(user=constants.testUser,
-            host=constants.testHost,
-            database=constants.testName,
-            password=constants.testPassword)                                                                                                               
-    cursor = cnx.cursor()
-  
-    # dates to retrieve data for batter test data
-    # start date
-    year = constants.gdStartYear
-    month = constants.gdStartMonth
-    day = constants.gdStartDay
-
-    numdays = constants.numdaysGradientDescent
-
+def fill(year, month, day, numdays, cursor):
     warnings.filterwarnings(action="ignore", module="scipy", message="^internal gelsd")
 
     dateIDs = getDates(day, month, year, numdays, cursor)
@@ -75,7 +59,7 @@ if __name__ == "__main__":
     # add minutes constraint
     get_players = "Select playerID from performance where dateID = %s"
     getDailyPlayerAvg = "SELECT blocks, points, steals, AST, turnovers, totalRebounds, tripleDouble, doubleDouble, 3PM, oRebound, dRebound, minutes, FG, FGA, FGP, 3PA, 3PP, FTM, FTA, FTP, personalFouls, plusMinus, trueShootingP, eFG, freeThrowAttemptRate, 3PointAttemptRate, oReboundP, dReboundP, totalReboundP, ASTP, STP, BLKP, turnoverP, USG, oRating, dRating FROM player_daily_avg WHERE dateID = %s AND playerID = %s"
-    getPerformanceDataForEachPlayer = "SELECT playerID, dateID, fanduel, draftkings, fanduelPosition, draftkingsPosition, team, opponent, fanduelPts, draftkingsPts, projMinutes FROM performance WHERE dateID = %s and projMinutes IS NOT NULL AND fanduel IS NOT NULL AND fanduelPosition IS NOT NULL"
+    getPerformanceDataForEachPlayer = "SELECT playerID, dateID, fanduel, draftkings, fanduelPosition, draftkingsPosition, team, opponent, fanduelPts, draftkingsPts, projMinutes FROM performance WHERE dateID = %s and projMinutes IS NOT NULL AND fanduelPosition IS NOT NULL"
     get_guards = "Select blocks, points, steals, assists, turnovers, tRebounds, DDD, DD, 3PM, 3PA, oRebounds, dRebounds, minutes, FG, FGA, FT, FTA, BPM, PPM, SPM, APM, TPM, DDDPG, DDPG, 3PP, ORPM, DRPM, FGP, FTP, usg, ORT, DRT, TS, eFG from team_vs_guards WHERE dateID = %s and dailyTeamID = %s"
     get_fowards = "Select blocks, points, steals, assists, turnovers, tRebounds, DDD, DD, 3PM, 3PA, oRebounds, dRebounds, minutes, FG, FGA, FT, FTA, BPM, PPM, SPM, APM, TPM, DDDPG, DDPG, 3PP, ORPM, DRPM, FGP, FTP, usg, ORT, DRT, TS, eFG from team_vs_fowards WHERE dateID = %s and dailyTeamID = %s"
 
@@ -85,10 +69,11 @@ if __name__ == "__main__":
     # execute command + load into numpy array
     playersPlaying = []
     for date in dateIDs:
+        print date
         dateD = (date,)
         cursor.execute(getPerformanceDataForEachPlayer, dateD)
-
         results = cursor.fetchall()
+        print getPerformanceDataForEachPlayer
         for player in results:
             playersPlaying.append(player)
 
@@ -200,7 +185,6 @@ if __name__ == "__main__":
         
 	features = tuple(indvPlayerData)
         cursor.execute(insert_features, features)
-        cnx.commit()
         feaID += 1
         features = ()
         playersActuallyPlaying.append(player)
@@ -223,3 +207,22 @@ if __name__ == "__main__":
         insertDataT = (insertData[0][0], insertData[0][1], player[0], player[1])
 
         cursor.execute(insertFeature, insertDataT)
+
+if __name__ == "__main__":
+    print("Loading data...")
+    cnx = mysql.connector.connect(user=constants.testUser,
+            host=constants.testHost,
+            database=constants.testName,
+            password=constants.testPassword)                                                                                                               
+    cursor = cnx.cursor()
+  
+    # dates to retrieve data for batter test data
+    year = constants.gdStartYear
+    month = constants.gdStartMonth
+    day = constants.gdStartDay
+
+    numdays = constants.numdaysGradientDescent
+
+    fill(year, month, day, numdays, cursor)
+
+  
