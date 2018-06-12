@@ -224,5 +224,7 @@ if __name__ == "__main__":
     numdays = constants.numdaysGradientDescent
 
     fill(year, month, day, numdays, cursor)
+    cnx.commit()
+    cursor.close()
 
   
