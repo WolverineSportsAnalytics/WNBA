@@ -46,7 +46,7 @@ def main():
     sumPoints.auto(today, cursor) 
     cursor.execute("update performance set projMinutes=minutesPlayed where projMinutes is null")
     cnx.commit()
-    featuresFiller.fill(now.year, now.month, now.day, today, cursor)
+    featuresFiller.fill(now.year, now.month, now.day, today, cursor, cnx)
     cursor.close()
     cnx.commit()
     cnx.close()
