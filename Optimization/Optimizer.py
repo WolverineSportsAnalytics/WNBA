@@ -53,16 +53,24 @@ def optimize(day, month, year, cursor, projection):
 
     # if duplicate player, increase n + generate next lineup,
     # next lineup will generate lineup with next highest amount of points
-    numLineups = 1
+    numLineups = 5
 
     lineups = optimizer.optimize(n=numLineups)
+    
+    lineup_lists = []
 
     for lineup in lineups:
-        print(lineup)
+        lineup_list = []
+        for player in lineup.players:
+            lineup_list.append(player)
+        lineup_lists.append(lineup_list)
+
         playerIDList = []
         dkpoints = 0
         for player in lineup.lineup:
             playerIDList.append(player.id)
+
+    return lineup_lists
 
 if __name__ == "__main__":
 
