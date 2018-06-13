@@ -48,7 +48,7 @@ def main():
     featuresFiller.fill(now.year, now.month, now.day, 1, cursor, cnx)
     train.train(today-1, cursor, cnx) 
     projectMagic.actualProjMagic(today, cursor, cnx)
-    Optimizer.optimize(now.day, now.month, now.year, cursor)
+    Optimizer.optimize(now.day, now.month, now.year, cursor, "simmonsProj")
 
     
     cursor.close()
