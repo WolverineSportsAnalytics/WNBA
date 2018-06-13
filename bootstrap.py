@@ -16,7 +16,6 @@ def main():
                                   database=constants.testName,
                                   password=constants.testPassword)
     cursor = cnx.cursor()
-    '''
     generateDates.generatedates(18, 5, 2018, 18, 9, 2018, cursor)
     cnx.commit()
     playerReferenceScraper.scrapeHtml(cursor,cnx)
@@ -39,7 +38,6 @@ def main():
                                   password=constants.testPassword)
     cursor = cnx.cursor()
 
-
     teamPerformanceScraper.updateAndInsertPlayerRef(18, 5, 2018, now.day, now.month, now.year, cursor, cnx)
     today = generateBoxScoreUrls.findDate(now.year, now.month, now.day, cursor)
     dailyPerformanceExtrapilator.extrapolate(0, today, cursor, cnx)
@@ -48,16 +46,10 @@ def main():
     sumPoints.auto(today, cursor) 
     cursor.execute("update performance set projMinutes=minutesPlayed where projMinutes is null")
     cnx.commit()
-    today = generateBoxScoreUrls.findDate(now.year, now.month, now.day, cursor)
     featuresFiller.fill(now.year, now.month, now.day, today, cursor)
-    '''
     cursor.close()
     cnx.commit()
     cnx.close()
-    
-
-
-
     
 
 if __name__=='__main__':
