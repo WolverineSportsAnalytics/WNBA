@@ -1,4 +1,5 @@
 import numpy as np
+import datetime
 from sklearn.linear_model import Ridge
 import mysql.connector
 import datetime as dt
@@ -8,7 +9,7 @@ import models
 def getDate(day, month, year, cursor):
     gameIDP = 0
 
-    findGame = "SELECT iddates FROM new_dates WHERE date = %s"
+    findGame = "SELECT iddates FROM dates WHERE date = %s"
     findGameData = (dt.date(year, month, day),)
     cursor.execute(findGame, findGameData)
 
@@ -82,8 +83,10 @@ if __name__ == "__main__":
             database=constants.testName,
             password=constants.testPassword)                                                                                                               
     cursor = cnx.cursor()
+
+    now = datetime.datetime.now() - datetime.timedelta(days=1)
   
-    dateID = getDate(day, month, year, cursor)
+    dateID = getDate(now.day, now.month, now.year, cursor)
 
     train(dateID, cursor, cnx)
 
