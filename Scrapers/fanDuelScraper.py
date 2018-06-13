@@ -31,8 +31,7 @@ def insert_into_performance(cursor, cnx, dateID):
     getPlayerbylastandTeam = "select playerID from player_reference where lastName= %s and team=%s"
 
     getTeamAbbrev = "SELECT wsa from team_reference where fanduel = %s"
-    update_performance = "INSERT INTO performance (playerID, dateID, fanduel, team, opponent, fanduelPosition, projMinutes) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-
+    update_performance = "INSERT INTO performance (playerID, dateID, fanduel, team, opponent, fanduelPosition, projMinutes, rotowireProj) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
     url = "https://www.rotowire.com/daily/wnba/optimizer.php?site=FanDuel&sport=wnba"
 
@@ -60,6 +59,7 @@ def insert_into_performance(cursor, cnx, dateID):
         sals = sal.split(",")
         sal = sals[0] + sals[1]
         minutes = i.find_all('td')[6].text
+        rotoProj = i.find_all('td')[16].find('input')['value']
         opp = i.find_all('td')[3].text
         getPlayerIDD = (name, )
         cursor.execute(getPlayerID, getPlayerIDD)
@@ -97,13 +97,15 @@ def insert_into_performance(cursor, cnx, dateID):
               team,
               opp,
               pos,
-              minutes)
+              minutes,
+              rotoProj,
+              )
 
               cursor.execute(update_performance, inserts)
 
           except:
               # traceback.print_exc()
-              print name
+              print name, "Not inserted"
 
           cnx.commit()
 
@@ -115,7 +117,7 @@ if __name__ == "__main__":
     cursor = cnx.cursor()
     
     #dateID = getDate(constants.dayP, constants.monthP, constants.yearP, cursor)
-    dateID = getDate(11, 6, 2018, cursor)
+    dateID = getDate(13, 6, 2018, cursor)
     print dateID
 
     insert_into_performance(cursor, cnx, dateID)

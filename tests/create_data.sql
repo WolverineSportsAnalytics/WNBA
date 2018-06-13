@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`performance` (
   `zoProj` FLOAT NULL DEFAULT NULL,
   `hardawayProj` FLOAT NULL DEFAULT NULL,
   `leProj` FLOAT NULL DEFAULT NULL,
+  `rotowireProj` FLOAT NULL DEFAULT NULL,
   `projMinutes` FLOAT NULL DEFAULT NULL,
   PRIMARY KEY (`performanceID`),
   INDEX `performanceDate_idx` (`dateID` ASC),
