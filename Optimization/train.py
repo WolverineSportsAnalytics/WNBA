@@ -17,19 +17,7 @@ def getDate(day, month, year, cursor):
 
     return gameIDP
 
-if __name__ == "__main__":
-
-    # dates to retrieve data for batter test data
-    # start date
-    cnx = mysql.connector.connect(user=constants.testUser,
-            host=constants.testHost,
-            database=constants.testName,
-            password=constants.testPassword)                                                                                                               
-    cursor = cnx.cursor()
-  
- #   dateID = getDate(day, month, year, cursor)
-    dateID = 24
-
+def train(dateID, cursor, cnx):
     print "Training Ben Simmons Model..."
 
 
@@ -85,3 +73,20 @@ if __name__ == "__main__":
 
     outfile = open(fileName, 'w')
     np.save(outfile, thetaSKLearnRidge)
+if __name__ == "__main__":
+
+    # dates to retrieve data for batter test data
+    # start date
+    cnx = mysql.connector.connect(user=constants.testUser,
+            host=constants.testHost,
+            database=constants.testName,
+            password=constants.testPassword)                                                                                                               
+    cursor = cnx.cursor()
+  
+    dateID = getDate(day, month, year, cursor)
+
+    train(dateID, cursor, cnx)
+
+    cnx.commit()
+    cnx.close()
+ 
