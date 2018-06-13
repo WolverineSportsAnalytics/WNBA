@@ -5,7 +5,7 @@ import datetime as dt
 import constants
 import models
 
-def actualProjMagic(todayID,cursor):
+def actualProjMagic(todayID,cursor, cnx):
 
     dateID = todayID
 
@@ -86,6 +86,6 @@ if __name__ == "__main__":
             password=constants.testPassword)                                                                                                               
     cursor = cnx.cursor()
     
-    actualProjMagic(constants.todayID, cursor)
+    actualProjMagic(constants.todayID, cursor, cnx)
     cnx.commit()
     cursor.close()
