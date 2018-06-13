@@ -40,7 +40,7 @@ def getDates(day, month, year, numdays, cursor):
                 gameIDs.append(game[0])
 
     return gameIDs
-def fill(year, month, day, numdays, cursor):
+def fill(year, month, day, numdays, cursor, cnx):
     warnings.filterwarnings(action="ignore", module="scipy", message="^internal gelsd")
 
     dateIDs = getDates(day, month, year, numdays, cursor)
@@ -69,11 +69,10 @@ def fill(year, month, day, numdays, cursor):
     # execute command + load into numpy array
     playersPlaying = []
     for date in dateIDs:
-        print date
+        print "Date", date
         dateD = (date,)
         cursor.execute(getPerformanceDataForEachPlayer, dateD)
         results = cursor.fetchall()
-        print getPerformanceDataForEachPlayer
         for player in results:
             playersPlaying.append(player)
 
@@ -190,6 +189,8 @@ def fill(year, month, day, numdays, cursor):
         feaID += 1
         features = ()
         playersActuallyPlaying.append(player)
+        cnx.commit()
+
 
     selectQuery = "SELECT playerID, dateID FROM features WHERE fanduelPts IS NULL"
     selectPerformance = "SELECT fanduelPts, draftkingsPts FROM performance WHERE playerID = %s AND dateID = %s"
@@ -199,6 +200,7 @@ def fill(year, month, day, numdays, cursor):
     cursor.execute(selectQuery)
 
     playersPlayed = cursor.fetchall()
+    
 
     for player in playersPlayed:
         pData = (player[0], player[1])
@@ -225,7 +227,7 @@ if __name__ == "__main__":
 
     numdays = constants.numdaysGradientDescent
 
-    fill(year, month, day, numdays, cursor)
+    fill(year, month, day, numdays, cursor, cnx)
     cnx.commit()
     cursor.close()
 
