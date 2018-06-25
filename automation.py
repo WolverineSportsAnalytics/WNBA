@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 # this will automate everything to be ran in one quick command daily
 import os
 import constants
