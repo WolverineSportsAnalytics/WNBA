@@ -17,7 +17,7 @@ def main():
     cursor = cnx.cursor()
     dates = generateBoxScoreUrls.generateDates(yesterday.day, yesterday.month, yesterday.year, now.day, now.month, now.year)
     print dates
-    generateBoxScoreUrls.generateUrls(cursor, cnx, dates)
+    # generateBoxScoreUrls.generateUrls(cursor, cnx, dates)
     performanceScraper.updateAndInsertPlayerRef(yesterday.day, yesterday.month, yesterday.year, now.day, now.month, now.year, cursor, cnx)
 
     try:
@@ -43,12 +43,13 @@ def main():
     cursor.execute("update performance set projMinutes=minutesPlayed where projMinutes is null")
     cnx.commit()
     today = generateBoxScoreUrls.findDate(now.year, now.month, now.day, cursor)
-    fanDuelScraper.insert_into_performance(cursor, cnx, today)
+    status = fanDuelScraper.insert_into_performance(cursor, cnx, today)
 
-    featuresFiller.fill(now.year, now.month, now.day, 1, cursor, cnx)
-    train.train(today-1, cursor, cnx) 
-    projectMagic.actualProjMagic(today, cursor, cnx)
-    Optimizer.optimize(now.day, now.month, now.year, cursor, "simmonsProj")
+    if status == 0:
+        featuresFiller.fill(now.year, now.month, now.day, 1, cursor, cnx)
+        train.train(today-1, cursor, cnx) 
+        projectMagic.actualProjMagic(today, cursor, cnx)
+        Optimizer.optimize(now.day, now.month, now.year, cursor, "simmonsProj")
 
     
     cursor.close()

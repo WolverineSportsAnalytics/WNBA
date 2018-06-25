@@ -1,5 +1,6 @@
 # will hopefully scrape a site other than fanduel for salaries and matchups daily
 import mysql.connector
+import datetime
 import constants
 import csv
 import traceback
@@ -37,6 +38,14 @@ def insert_into_performance(cursor, cnx, dateID):
 
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'html.parser')
+    soup2 = soup
+    
+    day = soup.find("div",{"id":"rwo-matchups"}).find("div",{"class":"rwo-game-team"})['data-day']
+    month, day , year = day.split("/")
+    today = datetime.datetime.now()
+    if day != str(today.day):
+        print "Not for today"
+        return 1
     players = soup.find("tbody", {"id": "players"}).find_all('tr')
 
 
@@ -108,6 +117,8 @@ def insert_into_performance(cursor, cnx, dateID):
               print name, "Not inserted"
 
           cnx.commit()
+
+          return 0
 
 if __name__ == "__main__":
     cnx = mysql.connector.connect(user=constants.testUser,
