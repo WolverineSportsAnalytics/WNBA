@@ -118,7 +118,7 @@ def insert_into_performance(cursor, cnx, dateID):
 
           cnx.commit()
 
-          return 0
+    return 0
 
 if __name__ == "__main__":
     cnx = mysql.connector.connect(user=constants.testUser,
