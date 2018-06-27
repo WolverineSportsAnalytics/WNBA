@@ -3,23 +3,30 @@ import os
 import constants
 from Scrapers import generateDates, playerReferenceScraper, positionScraper, teamReferenceScraper, generateBoxScoreUrls, teamPerformanceScraper, performanceScraper
 from Extrapilators import dailyPerformanceExtrapilator, teamPerformanceExtrapilator, teamVsDefenseExtrapilator
-from Optimization import sumPoints, featuresFiller 
+from Optimization import sumPoints, featuresFiller, Optimizer, projectMagic, train
 import mysql.connector
 import datetime
+import time
 
-def main():
-    if constants.testPassword != "":
-        string = "mysql -h " + constants.testHost + " -u " + constants.testUser + " -p\"" + constants.testPassword + "\" < tests/create_data.sql"
-        os.system(string)
-    else:
-        os.system("mysql -u " + constants.testUser + " < tests/create_data.sql")
-   
-    now = datetime.datetime.now()
-    cnx = mysql.connector.connect(user=constants.testUser,
+def make_connection():
+     try:
+        cnx = mysql.connector.connect(user=constants.testUser,
                                   host=constants.testHost,
                                   database=constants.testName,
-                                  password=constants.testPassword)
-    cursor = cnx.cursor()
+                                  password=constants.testPassword,
+                                  )
+        cursor = cnx.cursor()
+        return cnx, cursor
+     except Exception as e:
+        print e
+        time.sleep(30)
+        return make_connection()
+
+def main():
+    now = datetime.datetime.now()
+           
+    cnx, cursor = make_connection()
+    print "We in"
 
     # check if performance is empty if not dont bootstrap
     cursor.execute("Select count(*) from performance")
@@ -34,6 +41,8 @@ def main():
     dates = generateBoxScoreUrls.generateDates(18, 5, 2018, now.day, now.month, now.year)
     generateBoxScoreUrls.generateUrls(cursor, cnx, dates)
     performanceScraper.updateAndInsertPlayerRef(18, 5, 2018, now.day, now.month, now.year, cursor, cnx)
+
+
 
     try:
         cursor.clos()
@@ -57,6 +66,15 @@ def main():
     cursor.execute("update performance set projMinutes=minutesPlayed where projMinutes is null")
     cnx.commit()
     featuresFiller.fill(now.year, now.month, now.day, today, cursor, cnx)
+
+    # fill in projections for previous days
+    train.train(today-1, cursor, cnx) 
+    for days in range(today):
+        try:
+            projectMagic.actualProjMagic(day, cursor, cnx)
+        except:
+            pass
+
     cursor.close()
     cnx.commit()
     cnx.close()
