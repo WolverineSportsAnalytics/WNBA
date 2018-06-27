@@ -2,6 +2,9 @@ import time
 import datetime
 import automation
 from apscheduler.schedulers.background import BackgroundScheduler
+import bootstrap
+
+bootstrap.main()
 def test_scheduler():
     print "Runing"
 
