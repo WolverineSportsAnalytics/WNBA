@@ -19,7 +19,7 @@ def main():
     cursor = cnx.cursor()
     dates = generateBoxScoreUrls.generateDates(yesterday.day, yesterday.month, yesterday.year, now.day, now.month, now.year)
     print dates
-    # generateBoxScoreUrls.generateUrls(cursor, cnx, dates)
+    generateBoxScoreUrls.generateUrls(cursor, cnx, dates)
     performanceScraper.updateAndInsertPlayerRef(yesterday.day, yesterday.month, yesterday.year, now.day, now.month, now.year, cursor, cnx)
 
     try:

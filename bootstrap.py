@@ -8,7 +8,11 @@ import mysql.connector
 import datetime
 
 def main():
-    os.system("mysql -u root < tests/create_data.sql")
+    if constants.testPassword != "":
+        string = "mysql -h " + constants.testHost + " -u " + constants.testUser + " -p\"" + constants.testPassword + "\" < tests/create_data.sql"
+        os.system(string)
+    else:
+        os.system("mysql -u " + constants.testUser + " < tests/create_data.sql")
    
     now = datetime.datetime.now()
     cnx = mysql.connector.connect(user=constants.testUser,
@@ -16,6 +20,12 @@ def main():
                                   database=constants.testName,
                                   password=constants.testPassword)
     cursor = cnx.cursor()
+
+    # check if performance is empty if not dont bootstrap
+    cursor.execute("Select count(*) from performance")
+    if cursor.fetchall()[0][0] != 0:
+       print "Performance not empty can't bootstrap"
+       return 
     generateDates.generatedates(18, 5, 2018, 18, 9, 2018, cursor)
     cnx.commit()
     playerReferenceScraper.scrapeHtml(cursor,cnx)
