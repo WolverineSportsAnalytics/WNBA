@@ -11,19 +11,19 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- Schema mydb
 -- -----------------------------------------------------
 -- -----------------------------------------------------
--- Schema wnba_test
+-- Schema wnba
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema wnba_test
+-- Schema wnb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `wnba_test` DEFAULT CHARACTER SET utf8 ;
-USE `wnba_test` ;
+CREATE SCHEMA IF NOT EXISTS `wnba` DEFAULT CHARACTER SET utf8 ;
+USE `wnba` ;
 
 -- -----------------------------------------------------
--- Table `wnba_test`.`dates`
+-- Table `wnba`.`dates`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wnba_test`.`dates` (
+CREATE TABLE IF NOT EXISTS `wnba`.`dates` (
   `iddates` INT(11) NOT NULL AUTO_INCREMENT,
   `date` DATE NOT NULL,
   PRIMARY KEY (`iddates`),
@@ -34,9 +34,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `wnba_test`.`box_score_urls`
+-- Table `wnba`.`box_score_urls`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wnba_test`.`box_score_urls` (
+CREATE TABLE IF NOT EXISTS `wnba`.`box_score_urls` (
   `idboxScoreUrls` INT(11) NOT NULL AUTO_INCREMENT,
   `url` VARCHAR(500) NULL DEFAULT NULL,
   `dateID` INT(11) NULL DEFAULT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`box_score_urls` (
   INDEX `boxScoreDateFK_idx` (`dateID` ASC),
   CONSTRAINT `boxScoreDateFK`
     FOREIGN KEY (`dateID`)
-    REFERENCES `wnba_test`.`dates` (`iddates`)
+    REFERENCES `wnba`.`dates` (`iddates`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -53,9 +53,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `wnba_test`.`player_reference`
+-- Table `wnba`.`player_reference`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wnba_test`.`player_reference` (
+CREATE TABLE IF NOT EXISTS `wnba`.`player_reference` (
   `playerID` INT(11) NOT NULL AUTO_INCREMENT,
   `bbrefID` TEXT NULL DEFAULT NULL,
   `rotogrindersID` INT(11) NULL DEFAULT NULL,
@@ -77,9 +77,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `wnba_test`.`performance`
+-- Table `wnba`.`performance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wnba_test`.`performance` (
+CREATE TABLE IF NOT EXISTS `wnba`.`performance` (
   `performanceID` INT(11) NOT NULL AUTO_INCREMENT,
   `playerID` INT(11) NULL DEFAULT NULL,
   `dateID` INT(11) NULL DEFAULT NULL,
@@ -139,12 +139,12 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`performance` (
   INDEX `playerPerformance_idx` (`playerID` ASC),
   CONSTRAINT `datePerformance`
     FOREIGN KEY (`dateID`)
-    REFERENCES `wnba_test`.`dates` (`iddates`)
+    REFERENCES `wnba`.`dates` (`iddates`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `playerPerformance`
     FOREIGN KEY (`playerID`)
-    REFERENCES `wnba_test`.`player_reference` (`playerID`)
+    REFERENCES `wnba`.`player_reference` (`playerID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -153,9 +153,9 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `wnba_test`.`team_reference`
+-- Table `wnba`.`team_reference`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wnba_test`.`team_reference` (
+CREATE TABLE IF NOT EXISTS `wnba`.`team_reference` (
   `teamID` int(10) NOT NULL AUTO_INCREMENT,
   `bbreff` varchar(100) DEFAULT NULL,
   `wsa` varchar(45) DEFAULT NULL,
@@ -173,9 +173,9 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`team_reference` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- -----------------------------------------------------
--- Table `wnba_test`.`team_performance`
+-- Table `wnba`.`team_performance`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `wnba_test`.`team_performance` (
+CREATE TABLE IF NOT EXISTS `wnba`.`team_performance` (
   `teamPerformanceID` int(11) NOT NULL AUTO_INCREMENT,
   `dailyTeamID` int(11) DEFAULT NULL,
   `dailyTeamOpponentID` int(11) DEFAULT NULL,
@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`team_performance` (
   CONSTRAINT `dailyTeamP` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `wnba_test`.`player_daily_avg` (
+CREATE TABLE IF NOT EXISTS `wnba`.`player_daily_avg` (
   `iddailyplayer` int(11) NOT NULL AUTO_INCREMENT,                                                                                                                                       
   `playerID` int(11) DEFAULT NULL,                                                                                                                                                       
   `dateID` int(11) DEFAULT NULL,                                                                                                                                                         
@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`player_daily_avg` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 
-CREATE TABLE IF NOT EXISTS `wnba_test`.`team_daily_avg_performance` (
+CREATE TABLE IF NOT EXISTS `wnba`.`team_daily_avg_performance` (
   `dailyAvgPerformanceID` int(11) NOT NULL AUTO_INCREMENT,                                                                                                                               
   `dailyTeamID` int(11) DEFAULT NULL,                                                                                                                                                    
   `dateID` int(11) DEFAULT NULL,                                                                                                                                                         
@@ -326,7 +326,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`team_daily_avg_performance` (
   CONSTRAINT `dailyTeamPerformanceTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `wnba_test`.`team_vs_guards` (
+CREATE TABLE IF NOT EXISTS `wnba`.`team_vs_guards` (
   `teamID` int(11) NOT NULL AUTO_INCREMENT,                                                                                                                                              
   `dailyTeamID` int(11) NOT NULL,                                                                                                                                                        
   `dateID` int(11) NOT NULL,
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`team_vs_guards` (
   CONSTRAINT `guardsTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `wnba_test`.`team_vs_fowards` (
+CREATE TABLE IF NOT EXISTS `wnba`.`team_vs_fowards` (
   `teamID` int(11) NOT NULL AUTO_INCREMENT,                                                                                                                                              
   `dailyTeamID` int(11) NOT NULL,                                                                                                                                                        
   `dateID` int(11) NOT NULL,
@@ -416,7 +416,7 @@ CREATE TABLE IF NOT EXISTS `wnba_test`.`team_vs_fowards` (
   CONSTRAINT `fowardsTeamID` FOREIGN KEY (`dailyTeamID`) REFERENCES `team_reference` (`teamID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-CREATE TABLE IF NOT EXISTS `wnba_test`.`features` (
+CREATE TABLE IF NOT EXISTS `wnba`.`features` (
   `idfeatures` int(11) NOT NULL AUTO_INCREMENT,                                                                                                                                          
   `playerID` int(11) DEFAULT NULL,                                                                                                                                                       
   `dateID` int(11) DEFAULT NULL,                                                                                                                                                         
