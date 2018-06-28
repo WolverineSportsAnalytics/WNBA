@@ -3,8 +3,13 @@
 # Passwords can be retrieved from a credentials file in Google Drive
 testHost='127.0.0.1'               
 testUser='root'                                    
-testName='wnba_test'                                           
-testPassword=''       
+testName='wnba'                                           
+testPassword=''   
+
+#testHost='us-cdbr-iron-east-04.cleardb.net'
+#testUser='b55af7ccf53051'
+#testName='heroku_fb3cf751abed282'
+#testPassword='6666db27'
 
 startDayP = 18
 startMonthP = 5
