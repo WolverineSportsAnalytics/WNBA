@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup, Comment
 from pydfs_lineup_optimizer import * # version >= 2.0.1
+import datetime
+from pytz import timezone
 
 '''
 Fanduel Scraper that scrapes rotogur for predicitions and optimizes lineups in place
@@ -11,6 +13,18 @@ def predict():
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'html.parser')
 
+    games = soup.find("div",{"id":"rwo-matchups"}).find_all("div",{"class":"rwo-game-team"})
+    zone = timezone("US/Eastern")
+    now = datetime.datetime.now(tz=zone).time().strftime('%H:%M:%S')
+    finished_games = []
+    for game in games:
+        team = game['data-team']
+        time = game['data-gametimeonly']
+
+        if now > time:
+            finished_games.append(team)
+
+
     players = soup.find_all('tr')
     player_list = []
 
@@ -20,7 +34,11 @@ def predict():
             names = name.split()
             name = names[0] + ' ' + names[1]
             
+            
             team  = i.find_all('td')[2].text.rstrip()# team
+            if team in finished_games:
+                continue
+
             pos = i.find_all('td')[3].text # pos
             if pos == 'C1':
                 pos = ['1B','C']
@@ -31,6 +49,7 @@ def predict():
             sals = sal.split(",")
             sal = sals[0] + sals[1]
             rotoProj = i.find_all('td')[7].find('input')['value']
+
 
 
             player_list.append(Player(count, names[0], names[1], pos, team, float(sal), float(rotoProj), False))
