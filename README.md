@@ -64,3 +64,6 @@ Check your python version to see if you are running python 2.7
 
 `$ deactivate`
 
+### sql command
+SELECT dates.date, avg(abs(performance.rotowireProj - performance.fanduelPTS)) as avgs FROM dates  INNER JOIN performance ON dates.iddates = performance.dateID where rotowireProj is not null group by date;
+
