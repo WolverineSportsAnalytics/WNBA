@@ -43,9 +43,12 @@ def insert_into_performance(cursor, cnx, dateID):
     day = soup.find("div",{"id":"rwo-matchups"}).find("div",{"class":"rwo-game-team"})['data-day']
     month, day , year = day.split("/")
     today = datetime.datetime.now()
-    if day != str(today.day):
+    print day
+    print str(today.day)
+    if str(int(day)) != str(int(today.day)):
         print "Not for today"
         return 1
+
     players = soup.find("tbody", {"id": "players"}).find_all('tr')
 
 
