@@ -6,6 +6,7 @@ import constants
 from Scrapers import generateDates, playerReferenceScraper, positionScraper, teamReferenceScraper, generateBoxScoreUrls, teamPerformanceScraper, performanceScraper, fanDuelScraper
 from Extrapilators import dailyPerformanceExtrapilator, teamPerformanceExtrapilator, teamVsDefenseExtrapilator
 from Optimization import sumPoints, featuresFiller, Optimizer, projectMagic, train
+from WnbaEngine import WnbaEngine
 import mysql.connector
 import datetime
 
@@ -52,8 +53,9 @@ def main():
         train.train(today-1, cursor, cnx) 
         projectMagic.actualProjMagic(today, cursor, cnx)
         Optimizer.optimize(now.day, now.month, now.year, cursor, "simmonsProj")
+        os.chdir("WnbaEngine")
+        WnbaEngine.getWsaLineups()
 
-    
     cursor.close()
     cnx.commit()
     cnx.close()

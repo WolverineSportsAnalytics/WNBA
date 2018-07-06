@@ -4,6 +4,7 @@ import mysql.connector
 import datetime as dt
 import constants
 import models
+import train
 
 def actualProjMagic(todayID,cursor, cnx):
 
@@ -42,8 +43,18 @@ def actualProjMagic(todayID,cursor, cnx):
 
     outfile = open("coefBen.npz", 'r')
     thetaSKLearnRidge = np.load(outfile)
+    
+    # neural network stuff
+
+    clf = train.train(todayID, cursor, cnx)
+    arr = clf.predict(targetX)
+    
+
     # predict
     targetBenSimmons = targetX.dot(np.transpose(thetaSKLearnRidge))
+
+    for num in range(len(arr)):
+        print targetBenSimmons[num], arr[num]
 
     statement = "SELECT playerID"
     statement += " FROM features"    # turn into numpy arrays
