@@ -8,7 +8,7 @@ import WsaLineups
 
 def getDateId(date, cursor):
     cursor.execute("Select iddates from dates where date=\"" + date+ "\"")
-    return cursor.fetchall()[0][0] -1
+    return cursor.fetchall()[0][0]
 
 class WnbaOptimizer():
     def __init__(self, date, cursor):
