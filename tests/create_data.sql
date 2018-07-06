@@ -32,6 +32,26 @@ CREATE TABLE IF NOT EXISTS `wnba`.`dates` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
+-- -----------------------------------------------------
+-- Table `wnba`.`lineups`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `wnba`.`lineups` (
+  `lineupNumber` INT(11) not Null,
+  `date` Date,
+  `G1` VARCHAR(45),
+  `G2` VARCHAR(45),
+  `G3` VARCHAR(45),
+  `F1` VARCHAR(45),
+  `F2` VARCHAR(45),
+  `F3` VARCHAR(45),
+  `F4` VARCHAR(45),
+  `slateName` varchar(45),
+  `projectedPoints` float,
+  `lineupType` VARCHAR(45),
+  PRIMARY KEY (`date`, `slateName`, `lineupNumber`, `lineupType`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
 
 -- -----------------------------------------------------
 -- Table `wnba`.`box_score_urls`

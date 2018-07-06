@@ -67,14 +67,22 @@ class WsaEngine():
 
         cnx.commit()
 
+    def getAllLineups(self, cursor, date):
 
+        query = "Select * from lineups where date=%s"
+        cursor.execute(query, (date,) )
+        fetchedLineups = cursor.fetchall()
+        lineups = []
+        for line in fetchedLineups:
+            lineups.append(WsaLineups.WsaLineup(line[2:9], line[1], line[9], line[10], line[11]))
+        return lineups
 
 def getWsaLineups():
 
     cnx = mysql.connector.connect(user="wsa@wsabasketball",
                 host='wsabasketball.mysql.database.azure.com',
                 database="wnba",
-                password="")                                                                                                               
+                password="LeBron>MJ!")                                                                                                               
     cursor = cnx.cursor()
         
     today = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -82,7 +90,8 @@ def getWsaLineups():
     gen = WsaEngine() 
     gen.get_slates()
     gen.setLineups(cursor,cnx, today)
-
+    lineups = gen.getAllLineups(cursor, today)
+    cache.set("WnbaLineups", lineups)
 
 if __name__=="__main__":
     getWsaLineups()
