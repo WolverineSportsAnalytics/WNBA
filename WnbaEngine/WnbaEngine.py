@@ -60,9 +60,9 @@ class WsaEngine():
         opt = WnbaOptimizer.WnbaOptimizer(date, cursor)
         opt.getPlayers(date)
         for slate in self.slates:
-            opt.generateLineups("rotoWireProj", 1, date, time, slate)
+            opt.generateLineups("rotoWireProj", 3, date, time, slate)
             opt.insertLineups(cursor)
-            opt.generateLineups("simmonsProj", 1, date, time, slate)
+            opt.generateLineups("simmonsProj", 3, date, time, slate)
             opt.insertLineups(cursor)
 
         cnx.commit()
@@ -74,7 +74,7 @@ class WsaEngine():
         fetchedLineups = cursor.fetchall()
         lineups = []
         for line in fetchedLineups:
-            lineups.append(WsaLineups.WsaLineup(line[2:9], line[1], line[9], line[10], line[11]))
+            lineups.append(WsaLineups.WsaLineup(line[2:9], line[1], line[9], line[10], line[11], line[0]))
         return lineups
 
 def getWsaLineups():

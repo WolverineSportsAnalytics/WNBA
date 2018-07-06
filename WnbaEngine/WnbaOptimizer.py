@@ -42,19 +42,19 @@ class WnbaOptimizer():
         optimizer = get_optimizer(Site.FANDUEL, Sport.WNBA)
         optimizer.load_players(opt_players)
 
-        lineups = optimizer.optimize(n=numLineups, max_exposure=0.3)
+        lineups = optimizer.optimize(n=numLineups)
+        number = 1
         for lineup in lineups:
             sublineup = []
             for player in lineup.players:
                 sublineup.append(player.first_name)
             points = lineup.fantasy_points_projection
-            self.my_lineups.append(WsaLineups.WsaLineup(sublineup, date, slate.name, points, op_type))
+            self.my_lineups.append(WsaLineups.WsaLineup(sublineup, date, slate.name, points, op_type, number))
+            number+=1
 
     
     def insertLineups(self, cursor):
-        count = 1 
         for lineup in self.my_lineups:
-            lineup.insertTable(cursor, count)
-            count += 1
+            lineup.insertTable(cursor)
         self.my_lineups = []
 
