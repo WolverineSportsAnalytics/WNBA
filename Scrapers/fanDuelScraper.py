@@ -8,6 +8,7 @@ from datetime import date
 import urllib2
 import requests
 from bs4 import BeautifulSoup, Comment
+import json
 
 '''
 Fanduel scraper scrapes the fanduel csv and inserts into the performance table
@@ -34,30 +35,17 @@ def insert_into_performance(cursor, cnx, dateID):
     getTeamAbbrev = "SELECT wsa from team_reference where fanduel = %s"
     update_performance = "INSERT INTO performance (playerID, dateID, fanduel, team, opponent, fanduelPosition, projMinutes, rotowireProj) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
 
-    url = "https://www.rotowire.com/daily/wnba/optimizer.php?site=FanDuel&sport=wnba"
-
+    url = "https://www.rotowire.com/daily/tables/optimizer-wnba.php?sport=WNBA&site=FanDuel&projections=&type=main&slate=Main"
     page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'html.parser')
-    soup2 = soup
+    players = json.loads(page.text)
     
-    day = soup.find("div",{"id":"rwo-matchups"}).find("div",{"class":"rwo-game-team"})['data-day']
-    month, day , year = day.split("/")
-    today = datetime.datetime.now()
-    print day
-    print str(today.day)
-    if str(int(day)) != str(int(today.day)):
-        print "Not for today"
-        return 1
+    for player in players:
 
-    players = soup.find("tbody", {"id": "players"}).find_all('tr')
-
-
-    for i in players:
-        name  = i.find_all('td')[1].text # name 
-        names = name.split()
-        name = names[0] + ' ' + names[1]
+        first_name = player['first_name'] 
+        last_name = player['last_name']
+        name = first_name + ' ' + last_name
         
-        team  = i.find_all('td')[2].text.rstrip()# team
+	team  = player['team'] 
         if team == "NY":
             team = "NYL"
         if team == "LAV":
@@ -65,26 +53,30 @@ def insert_into_performance(cursor, cnx, dateID):
         if team == "LA":
             team = "LAS"
 
-        pos = i.find_all('td')[4].text # pos
-        sal = i.find_all('td')[15].find('input')['value']
-        sal = sal[1:]
-        sals = sal.split(",")
-        sal = sals[0] + sals[1]
-        minutes = i.find_all('td')[6].text
-        rotoProj = i.find_all('td')[16].find('input')['value']
-        opp = i.find_all('td')[3].text
+	pos = player['position']
+        sal = player['salary']
+        rotoProj = player['proj_rotowire']
+        minutes = player['minutes']
+	opp  = player['opponent'] 
+	if opp == "NY":
+            opp = "NYL"
+        if opp == "LAV":
+            opp = "LVA"
+        if opp == "LA":
+            opp = "LAS"
+	
         getPlayerIDD = (name, )
         cursor.execute(getPlayerID, getPlayerIDD)
         player_id = cursor.fetchall()
   
         if not len(player_id):                    
 
-            getPlayerIDD = (names[0], team )
+            getPlayerIDD = (first_name, team )
             cursor.execute(getPlayerbyfirstandTeam, getPlayerIDD)
             player_id = cursor.fetchall()
             
             if not len(player_id):
-                getPlayerIDD = (names[1], team )
+                getPlayerIDD = (last_name, team )
                 cursor.execute(getPlayerbylastandTeam, getPlayerIDD)
                 player_id = cursor.fetchall()
 
